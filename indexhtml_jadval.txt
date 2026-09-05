@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔬 جایگاه عناصر · بازی شیمی</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', 'Vazir', system-ui, sans-serif;
+            background: linear-gradient(145deg, #0b2b3f 0%, #1a4a5f 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            touch-action: pan-y;
+        }
+        .game-container {
+            max-width: 480px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 56px 56px 40px 40px;
+            padding: 20px 16px 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        h1 {
+            color: #e8f4f8;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1.7rem;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 6px #0a1e2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        h1 small {
+            font-size: 0.9rem;
+            background: #f7c948;
+            color: #1e3a4b;
+            padding: 2px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            box-shadow: inset 0 -2px 0 #b68a2a;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            background: #12303ecc;
+            border-radius: 60px;
+            padding: 10px 18px;
+            margin-bottom: 24px;
+            color: #d4ecf5;
+            font-weight: 500;
+            backdrop-filter: blur(2px);
+            border: 1px solid #2b6c84;
+            font-size: 0.95rem;
+        }
+        .stats span {
+            background: #1d4f63;
+            padding: 4px 16px;
+            border-radius: 40px;
+            color: #f6faff;
+            box-shadow: inset 0 1px 4px #0a2a36;
+        }
+        .element-card {
+            background: #dcecf5;
+            background-image: radial-gradient(circle at 20% 25%, #ffffff88 0%, #b8d6e8 100%);
+            padding: 24px 12px;
+            border-radius: 80px 80px 40px 40px;
+            box-shadow: 0 8px 0 #2d5d72, 0 12px 24px #00000055;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 2px solid #c0ddee;
+        }
+        .element-symbol {
+            font-size: 4.2rem;
+            font-weight: 700;
+            color: #0b2f3e;
+            line-height: 1;
+            text-shadow: 0 2px 4px #ffffff70;
+            letter-spacing: 2px;
+        }
+        .element-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #123845;
+            margin: 4px 0 2px;
+        }
+        .element-hint {
+            font-size: 0.95rem;
+            color: #1f5369;
+            background: #eef7fc;
+            display: inline-block;
+            padding: 2px 20px;
+            border-radius: 30px;
+            margin-top: 4px;
+            border: 1px solid #97bcca;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 18px 0 12px;
+        }
+        .option-btn {
+            background: #eaf3f9;
+            border: none;
+            border-radius: 50px;
+            padding: 16px 6px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #07303f;
+            box-shadow: 0 5px 0 #2b5f72, 0 6px 12px #00000033;
+            transition: all 0.05s linear;
+            touch-action: manipulation;
+            cursor: pointer;
+            text-align: center;
+            border: 1px solid #b4d2e3;
+            letter-spacing: 0.3px;
+            word-break: break-word;
+            line-height: 1.2;
+        }
+        .option-btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 1px 0 #1d4a5a;
+        }
+        .option-btn.correct-glow {
+            background: #8bc34a;
+            border-color: #558b2f;
+            box-shadow: 0 0 12px #a5d6a7;
+            color: #1e3a1e;
+        }
+        .option-btn.wrong-glow {
+            background: #ef9a9a;
+            border-color: #b71c1c;
+            box-shadow: 0 0 12px #ef5350;
+            color: #4a1a1a;
+        }
+        .option-btn:disabled {
+            opacity: 0.7;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #1d4a5a;
+        }
+        .action-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 20px 0 8px;
+        }
+        .action-btn {
+            background: #f5d742;
+            border: none;
+            border-radius: 60px;
+            padding: 14px 28px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #08222e;
+            box-shadow: 0 6px 0 #a77d2a, 0 8px 16px #00000044;
+            transition: all 0.06s linear;
+            touch-action: manipulation;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #ffe28a;
+            flex: 1;
+            justify-content: center;
+        }
+        .action-btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 1px 0 #8f6b22;
+        }
+        .action-btn.secondary {
+            background: #b0cfdd;
+            box-shadow: 0 6px 0 #587a89;
+            color: #09212b;
+            border-color: #8eb3c7;
+        }
+        .feedback {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+            min-height: 2.4rem;
+            color: #f0fcff;
+            background: #123d4e80;
+            border-radius: 50px;
+            padding: 8px 12px;
+            margin: 12px 0 0;
+            backdrop-filter: blur(2px);
+            border: 1px solid #3a7f96;
+        }
+        @media (max-width: 420px) {
+            .option-btn { font-size: 1rem; padding: 14px 4px; }
+            .element-symbol { font-size: 3.2rem; }
+        }
+        .group-tag {
+            background: #1e4f62;
+            color: #ddf0f7;
+            padding: 2px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 4px;
+        }
+        .footer-note {
+            color: #95bccc;
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 16px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <h1>
+        <span>🧪 جدول تناوبی</span>
+        <small>۳۶ عنصر</small>
+    </h1>
+    <div class="stats">
+        <div>🎯 <span id="scoreDisplay">۰</span></div>
+        <div>📦 <span id="roundDisplay">۱ / ۳۶</span></div>
+    </div>
+
+    <div class="element-card" id="elementCard">
+        <div class="element-symbol" id="symbolDisplay">H</div>
+        <div class="element-name" id="nameDisplay">هیدروژن</div>
+        <div class="element-hint" id="hintDisplay">گروه ?</div>
+    </div>
+
+    <div class="options-grid" id="optionsContainer">
+        <button class="option-btn" data-group="۱">۱</button>
+        <button class="option-btn" data-group="۲">۲</button>
+        <button class="option-btn" data-group="۱۳">۱۳</button>
+        <button class="option-btn" data-group="۱۴">۱۴</button>
+        <button class="option-btn" data-group="۱۵">۱۵</button>
+        <button class="option-btn" data-group="۱۶">۱۶</button>
+        <button class="option-btn" data-group="۱۷">۱۷</button>
+        <button class="option-btn" data-group="۱۸">۱۸</button>
+        <button class="option-btn" data-group="۳">۳</button>
+    </div>
+
+    <div class="action-row">
+        <button class="action-btn" id="nextBtn">▶ بعدی</button>
+        <button class="action-btn secondary" id="resetBtn">🔄 جدید</button>
+    </div>
+
+    <div class="feedback" id="feedbackMessage">گروه عنصر را انتخاب کن!</div>
+    <div class="footer-note">🔹 عناصر ۱ تا ۳۶ · گروه‌های اصلی</div>
+</div>
+<script>
+    (function() {
+        const ELEMENTS = [
+            { symbol: "H", name: "هیدروژن", group: 1 },
+            { symbol: "He", name: "هلیوم", group: 18 },
+            { symbol: "Li", name: "لیتیوم", group: 1 },
+            { symbol: "Be", name: "بریلیوم", group: 2 },
+            { symbol: "B", name: "بور", group: 13 },
+            { symbol: "C", name: "کربن", group: 14 },
+            { symbol: "N", name: "نیتروژن", group: 15 },
+            { symbol: "O", name: "اکسیژن", group: 16 },
+            { symbol: "F", name: "فلوئور", group: 17 },
+            { symbol: "Ne", name: "نئون", group: 18 },
+            { symbol: "Na", name: "سدیم", group: 1 },
+            { symbol: "Mg", name: "منیزیم", group: 2 },
+            { symbol: "Al", name: "آلومینیوم", group: 13 },
+            { symbol: "Si", name: "سیلیسیم", group: 14 },
+            { symbol: "P", name: "فسفر", group: 15 },
+            { symbol: "S", name: "گوگرد", group: 16 },
+            { symbol: "Cl", name: "کلر", group: 17 },
+            { symbol: "Ar", name: "آرگون", group: 18 },
+            { symbol: "K", name: "پتاسیم", group: 1 },
+            { symbol: "Ca", name: "کلسیم", group: 2 },
+            { symbol: "Sc", name: "اسکاندیم", group: 3 },
+            { symbol: "Ti", name: "تیتانیوم", group: 4 },
+            { symbol: "V", name: "وانادیوم", group: 5 },
+            { symbol: "Cr", name: "کروم", group: 6 },
+            { symbol: "Mn", name: "منگنز", group: 7 },
+            { symbol: "Fe", name: "آهن", group: 8 },
+            { symbol: "Co", name: "کبالت", group: 9 },
+            { symbol: "Ni", name: "نیکل", group: 10 },
+            { symbol: "Cu", name: "مس", group: 11 },
+            { symbol: "Zn", name: "روی", group: 12 },
+            { symbol: "Ga", name: "گالیوم", group: 13 },
+            { symbol: "Ge", name: "ژرمانیوم", group: 14 },
+            { symbol: "As", name: "آرسنیک", group: 15 },
+            { symbol: "Se", name: "سلنیوم", group: 16 },
+            { symbol: "Br", name: "برم", group: 17 },
+            { symbol: "Kr", name: "کریپتون", group: 18 }
+        ];
+
+        const ELEMENTS_FOR_GAME = ELEMENTS.map(el => {
+            let group = el.group;
+            if (group >= 4 && group <= 12) group = 3;
+            return { ...el, group };
+        });
+
+        let currentIndex = 0;
+        let score = 0;
+        let answered = false;
+        let totalRounds = ELEMENTS_FOR_GAME.length;
+
+        const symbolDisplay = document.getElementById('symbolDisplay');
+        const nameDisplay = document.getElementById('nameDisplay');
+        const hintDisplay = document.getElementById('hintDisplay');
+        const optionsBtns = document.querySelectorAll('.option-btn');
+        const feedbackDiv = document.getElementById('feedbackMessage');
+        const scoreSpan = document.getElementById('scoreDisplay');
+        const roundSpan = document.getElementById('roundDisplay');
+        const nextBtn = document.getElementById('nextBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        let shuffledElements = [];
+
+        function initShuffled() {
+            shuffledElements = shuffleArray([...ELEMENTS_FOR_GAME]);
+        }
+        initShuffled();
+
+        function displayElement(index) {
+            const el = shuffledElements[index];
+            if (!el) return;
+            symbolDisplay.textContent = el.symbol;
+            nameDisplay.textContent = el.name;
+            let groupDisplay = el.group;
+            hintDisplay.textContent = `گروه ${groupDisplay}`;
+            optionsBtns.forEach(btn => {
+                btn.classList.remove('correct-glow', 'wrong-glow');
+                btn.disabled = false;
+            });
+            answered = false;
+            feedbackDiv.textContent = '🤔 گروه عنصر را انتخاب کن!';
+            roundSpan.textContent = `${index+1} / ${totalRounds}`;
+        }
+
+        function updateScore() {
+            scoreSpan.textContent = score;
+        }
+
+        function handleOptionClick(e) {
+            if (answered) {
+                feedbackDiv.textContent = '⏳ قبلاً به این سوال پاسخ دادی! روی "بعدی" بزن.';
+                return;
+            }
+            const btn = e.currentTarget;
+            const selectedGroup = parseInt(btn.dataset.group, 10);
+            const currentElement = shuffledElements[currentIndex];
+            const correctGroup = currentElement.group;
+
+            optionsBtns.forEach(b => b.disabled = true);
+
+            let isCorrect = (selectedGroup === correctGroup);
+            if (isCorrect) {
+                score++;
+                updateScore();
+                feedbackDiv.textContent = `✅ درست! گروه ${correctGroup} ✅`;
+                btn.classList.add('correct-glow');
+            } else {
+                feedbackDiv.textContent = `❌ گروه صحیح ${correctGroup} است. ❌`;
+                btn.classList.add('wrong-glow');
+                optionsBtns.forEach(b => {
+                    if (parseInt(b.dataset.group, 10) === correctGroup) {
+                        b.classList.add('correct-glow');
+                    }
+                });
+            }
+            answered = true;
+        }
+
+        function nextElement() {
+            if (currentIndex + 1 >= totalRounds) {
+                initShuffled();
+                currentIndex = 0;
+                displayElement(currentIndex);
+                feedbackDiv.textContent = '♻️ دور جدید! گروه را انتخاب کن.';
+                optionsBtns.forEach(b => b.classList.remove('correct-glow', 'wrong-glow'));
+                return;
+            }
+            currentIndex++;
+            displayElement(currentIndex);
+            optionsBtns.forEach(b => b.classList.remove('correct-glow', 'wrong-glow'));
+            optionsBtns.forEach(b => b.disabled = false);
+        }
+
+        function resetGame() {
+            initShuffled();
+            currentIndex = 0;
+            score = 0;
+            updateScore();
+            displayElement(0);
+            optionsBtns.forEach(b => {
+                b.classList.remove('correct-glow', 'wrong-glow');
+                b.disabled = false;
+            });
+            feedbackDiv.textContent = '🔄 بازی جدید! گروه عنصر را انتخاب کن.';
+        }
+
+        optionsBtns.forEach(btn => {
+            btn.addEventListener('click', handleOptionClick);
+        });
+
+        nextBtn.addEventListener('click', nextElement);
+        resetBtn.addEventListener('click', resetGame);
+
+        (function start() {
+            initShuffled();
+            currentIndex = 0;
+            score = 0;
+            updateScore();
+            displayElement(0);
+            feedbackDiv.textContent = '🎯 گروه عنصر را انتخاب کن!';
+        })();
+
+        document.querySelectorAll('button').forEach(b => {
+            b.addEventListener('touchstart', (e) => {
+            }, { passive: true });
+        });
+
+    })();
+</script>
+</body>
+</html>

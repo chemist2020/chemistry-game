@@ -17,7 +17,7 @@
             touch-action: pan-y;
         }
         .game-container {
-            max-width: 480px;
+            max-width: 520px;
             width: 100%;
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(4px);
@@ -96,30 +96,29 @@
         }
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
             margin: 18px 0 12px;
         }
         .option-btn {
             background: #eaf3f9;
             border: none;
-            border-radius: 50px;
-            padding: 16px 6px;
-            font-size: 1.2rem;
+            border-radius: 12px;
+            padding: 12px 4px;
+            font-size: 1rem;
             font-weight: 600;
             color: #07303f;
-            box-shadow: 0 5px 0 #2b5f72, 0 6px 12px #00000033;
+            box-shadow: 0 4px 0 #2b5f72, 0 4px 8px #00000033;
             transition: all 0.05s linear;
             touch-action: manipulation;
             cursor: pointer;
             text-align: center;
             border: 1px solid #b4d2e3;
             letter-spacing: 0.3px;
-            word-break: break-word;
             line-height: 1.2;
         }
         .option-btn:active {
-            transform: translateY(5px);
+            transform: translateY(4px);
             box-shadow: 0 1px 0 #1d4a5a;
         }
         .option-btn.correct-glow {
@@ -200,9 +199,14 @@
             border-radius: 40px;
             backdrop-filter: blur(2px);
         }
-        @media (max-width: 420px) {
-            .option-btn { font-size: 1rem; padding: 14px 4px; }
-            .element-symbol { font-size: 3.2rem; }
+        @media (max-width: 480px) {
+            .options-grid { grid-template-columns: repeat(6, 1fr); gap: 5px; }
+            .option-btn { font-size: 0.8rem; padding: 10px 2px; border-radius: 8px; }
+            .element-symbol { font-size: 3rem; }
+        }
+        @media (max-width: 380px) {
+            .options-grid { grid-template-columns: repeat(6, 1fr); gap: 4px; }
+            .option-btn { font-size: 0.7rem; padding: 8px 1px; }
         }
         .footer-note {
             color: #95bccc;
@@ -230,15 +234,24 @@
     </div>
 
     <div class="options-grid" id="optionsContainer">
-        <button class="option-btn" data-group="۱">۱</button>
-        <button class="option-btn" data-group="۲">۲</button>
-        <button class="option-btn" data-group="۱۳">۱۳</button>
-        <button class="option-btn" data-group="۱۴">۱۴</button>
-        <button class="option-btn" data-group="۱۵">۱۵</button>
-        <button class="option-btn" data-group="۱۶">۱۶</button>
-        <button class="option-btn" data-group="۱۷">۱۷</button>
-        <button class="option-btn" data-group="۱۸">۱۸</button>
-        <button class="option-btn" data-group="۳">۳</button>
+        <button class="option-btn" data-group="1">۱</button>
+        <button class="option-btn" data-group="2">۲</button>
+        <button class="option-btn" data-group="3">۳</button>
+        <button class="option-btn" data-group="4">۴</button>
+        <button class="option-btn" data-group="5">۵</button>
+        <button class="option-btn" data-group="6">۶</button>
+        <button class="option-btn" data-group="7">۷</button>
+        <button class="option-btn" data-group="8">۸</button>
+        <button class="option-btn" data-group="9">۹</button>
+        <button class="option-btn" data-group="10">۱۰</button>
+        <button class="option-btn" data-group="11">۱۱</button>
+        <button class="option-btn" data-group="12">۱۲</button>
+        <button class="option-btn" data-group="13">۱۳</button>
+        <button class="option-btn" data-group="14">۱۴</button>
+        <button class="option-btn" data-group="15">۱۵</button>
+        <button class="option-btn" data-group="16">۱۶</button>
+        <button class="option-btn" data-group="17">۱۷</button>
+        <button class="option-btn" data-group="18">۱۸</button>
     </div>
 
     <div class="action-row">
@@ -248,10 +261,9 @@
 
     <div class="feedback" id="feedbackMessage">گروه عنصر را انتخاب کن!</div>
     
-    <!-- اسم شما دقیقاً اینجا اضافه شد -->
     <div class="teacher-name">👩‍🏫 مریم عرفانی مرادزاده</div>
 
-    <div class="footer-note">🔹 عناصر ۱ تا ۳۶ · گروه‌های اصلی</div>
+    <div class="footer-note">🔹 عناصر ۱ تا ۳۶ · ۱۸ گروه جدول تناوبی</div>
 </div>
 <script>
     (function() {
@@ -294,11 +306,8 @@
             { symbol: "Kr", name: "کریپتون", group: 18 }
         ];
 
-        const ELEMENTS_FOR_GAME = ELEMENTS.map(el => {
-            let group = el.group;
-            if (group >= 4 && group <= 12) group = 3;
-            return { ...el, group };
-        });
+        // دیگر نیازی به تغییر گروه نیست، همه گروه‌ها به صورت واقعی نگه داشته می‌شوند
+        const ELEMENTS_FOR_GAME = [...ELEMENTS];
 
         let currentIndex = 0;
         let score = 0;

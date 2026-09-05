@@ -39,6 +39,7 @@
             justify-content: center;
             gap: 10px;
             margin-bottom: 12px;
+            flex-wrap: wrap;
         }
         h1 small {
             font-size: 0.9rem;
@@ -92,16 +93,6 @@
             font-weight: 600;
             color: #123845;
             margin: 4px 0 2px;
-        }
-        .element-hint {
-            font-size: 0.95rem;
-            color: #1f5369;
-            background: #eef7fc;
-            display: inline-block;
-            padding: 2px 20px;
-            border-radius: 30px;
-            margin-top: 4px;
-            border: 1px solid #97bcca;
         }
         .options-grid {
             display: grid;
@@ -196,24 +187,28 @@
             backdrop-filter: blur(2px);
             border: 1px solid #3a7f96;
         }
+        .teacher-name {
+            text-align: center;
+            color: #b8d8e8;
+            font-size: 0.95rem;
+            margin-top: 18px;
+            padding: 6px 0;
+            border-top: 1px solid #2a6a7e;
+            letter-spacing: 0.5px;
+            font-weight: 400;
+            background: #0d334380;
+            border-radius: 40px;
+            backdrop-filter: blur(2px);
+        }
         @media (max-width: 420px) {
             .option-btn { font-size: 1rem; padding: 14px 4px; }
             .element-symbol { font-size: 3.2rem; }
-        }
-        .group-tag {
-            background: #1e4f62;
-            color: #ddf0f7;
-            padding: 2px 14px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            display: inline-block;
-            margin-top: 4px;
         }
         .footer-note {
             color: #95bccc;
             text-align: center;
             font-size: 0.7rem;
-            margin-top: 16px;
+            margin-top: 10px;
             opacity: 0.7;
         }
     </style>
@@ -232,7 +227,6 @@
     <div class="element-card" id="elementCard">
         <div class="element-symbol" id="symbolDisplay">H</div>
         <div class="element-name" id="nameDisplay">هیدروژن</div>
-        <div class="element-hint" id="hintDisplay">گروه ?</div>
     </div>
 
     <div class="options-grid" id="optionsContainer">
@@ -253,6 +247,10 @@
     </div>
 
     <div class="feedback" id="feedbackMessage">گروه عنصر را انتخاب کن!</div>
+    
+    <!-- اسم شما دقیقاً اینجا اضافه شد -->
+    <div class="teacher-name">👩‍🏫 مریم عرفانی مرادزاده</div>
+
     <div class="footer-note">🔹 عناصر ۱ تا ۳۶ · گروه‌های اصلی</div>
 </div>
 <script>
@@ -309,7 +307,6 @@
 
         const symbolDisplay = document.getElementById('symbolDisplay');
         const nameDisplay = document.getElementById('nameDisplay');
-        const hintDisplay = document.getElementById('hintDisplay');
         const optionsBtns = document.querySelectorAll('.option-btn');
         const feedbackDiv = document.getElementById('feedbackMessage');
         const scoreSpan = document.getElementById('scoreDisplay');
@@ -337,8 +334,6 @@
             if (!el) return;
             symbolDisplay.textContent = el.symbol;
             nameDisplay.textContent = el.name;
-            let groupDisplay = el.group;
-            hintDisplay.textContent = `گروه ${groupDisplay}`;
             optionsBtns.forEach(btn => {
                 btn.classList.remove('correct-glow', 'wrong-glow');
                 btn.disabled = false;
